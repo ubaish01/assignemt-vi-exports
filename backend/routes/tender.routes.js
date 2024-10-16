@@ -1,15 +1,14 @@
 const express = require('express');
-const { createTender, getTenders, submitBid, getBidsForTender } = require('../controllers/tender.controller');
+const { createTender, getTenders, submitBid, getBidsForTender, getActiveTenders, getTenderById, deleteTender } = require('../controllers/tender.controller');
 const { protect, adminOnly } = require('../middleware/auth');
 const router = express.Router();
 
-// Admin only routes
-router.post('/tenders', protect, adminOnly, createTender);
-
-
-// user and admin routes
-router.get('/tenders', protect, getTenders);
+router.post('/', protect, adminOnly, createTender);
+router.get('/', protect, getTenders);
+router.get('/:id', protect, getTenderById);
+router.delete('/:id', protect, deleteTender);
+router.get('/users/active', protect, getActiveTenders);
 router.post('/bids', protect, submitBid);
-router.get('/tenders/:tenderId/bids', getBidsForTender);
+router.get('/:tenderId/bids', getBidsForTender);
 
 module.exports = router;

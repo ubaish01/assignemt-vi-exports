@@ -9,24 +9,21 @@ import {
     Settings,
     User,
     X,
-    Bell
+    Bell,
+    Store
   } from 'lucide-react'
   import React, { useEffect, useRef, useState } from 'react'
   import { Link, useLocation, useNavigate } from 'react-router-dom'
   import logo from '../assets/react.svg'
-  import profile from '../assets/react.svg'
+  import profile from '../assets/avatar.jpg'
 import toast from 'react-hot-toast'
+import useNotifications from '../hooks/use-notifications'
   
   const routes = [
     {
-      label: 'Home',
+      label: 'Tenders',
       path: '/',
-      icon: Home
-    },
-    {
-      label: 'Chatbot',
-      path: '/chatbot',
-      icon: MessageSquare
+      icon: Store
     },
     {
       label: 'Reports',
@@ -49,14 +46,11 @@ import toast from 'react-hot-toast'
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
     const [isMenuVisible, setMenuVisible] = useState(false)
     const [isNotificationOpen, setNotificationOpen] = useState(false)
+    const {notifications,newNotificationsCount} = useNotifications()
     const navigate = useNavigate();
     const isLogin = localStorage.getItem("token")?.length>0;
-    const [notifications, setNotifications] = useState([
-      { id: 1, message: 'New bid on Tender #123' },
-      { id: 2, message: 'Tender #456 is closing soon' },
-      { id: 3, message: 'You have a new message from Admin' }
-    ])
-    
+    const user = JSON.parse(localStorage.getItem("user"));
+
     const menuRef = useRef(null)
     const sidebarRef = useRef(null)
     const notificationRef = useRef(null) // Reference for the notification modal
@@ -90,15 +84,16 @@ import toast from 'react-hot-toast'
     }, [])
   
     // Notification count (for badge)
-    const notificationCount = notifications.length
+    const notificationCount = notifications?.length || 0
 
     const handleLogout = ()=>{
         localStorage.removeItem("token");
+        localStorage.removeItem("user");
         navigate("/login")
         setMenuVisible(false)
     }
 
-if(!isLogin)return null
+    if(!isLogin)return null
   
     return (
       <>
@@ -120,13 +115,10 @@ if(!isLogin)return null
                 </button>
                 <Link to="/" className="flex items-center ml-2 sm:ml-0 space-x-3 group">
                   <img
-                    src={logo}
-                    className="h-8 w-8 transition-transform group-hover:rotate-180 duration-700"
+                    src={"https://viexports.com/wp-content/uploads/2023/09/Untitled-design-18.jpg"}
+                    className="w-28 transition-transform  duration-700"
                     alt="Logo"
                   />
-                  <span className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
-                    VI-Exports
-                  </span>
                 </Link>
               </div>
   
@@ -139,9 +131,9 @@ if(!isLogin)return null
                     className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
                   >
                     <Bell className="w-6 h-6" />
-                    {notificationCount > 0 && (
+                    {newNotificationsCount > 0 && (
                       <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
-                        {notificationCount}
+                        {newNotificationsCount}
                       </span>
                     )}
                   </button>
@@ -156,20 +148,34 @@ if(!isLogin)return null
                         <h3 className="text-sm font-semibold text-gray-900">Notifications</h3>
                       </div>
                       <div className="py-2 max-h-64 overflow-y-auto">
-                        {notifications.length > 0 ? (
-                          notifications.map((notification) => (
-                            <div
-                              key={notification.id}
-                              className="px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                      {notifications.length > 0 ? (
+                        notifications.map((notification) => {
+                          // Check if the notification is new (created within the last 3 minutes)
+                          const now = new Date();
+                          const notificationTime = new Date(notification.createdAt);
+                          const timeDiffInMinutes = (now - notificationTime) / (1000 * 60);
+                          const isNew = timeDiffInMinutes < 3;
+
+                          return (
+                            <Link
+                              to={`/bids/${notification?.tender?._id}`}
+                              key={notification._id}
                             >
-                              {notification.message}
-                            </div>
-                          ))
-                        ) : (
-                          <div className="px-4 py-2.5 text-sm text-gray-700">
-                            No new notifications
-                          </div>
-                        )}
+                              <div
+                                onClick={() => setNotificationOpen(false)}
+                                className={`px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200 ${isNew ? 'font-bold bg-gray-100' : ''
+                                  }`}
+                              >
+                                {notification.content} 
+                              </div>
+                            </Link>
+                          )
+                        })
+                      ) : (
+                        <div className="px-4 py-2.5 text-sm text-gray-700">
+                          No new notifications
+                        </div>
+                      )}
                       </div>
                     </div>
                   )}
@@ -186,8 +192,8 @@ if(!isLogin)return null
                       src={profile}
                       alt="User"
                     />
-                    <span className="hidden sm:block text-sm font-medium text-gray-700">
-                      {"ubaish"}
+                    <span className="hidden capitalize sm:block text-sm font-medium text-gray-700">
+                      {user?.role||"ubaish"}
                     </span>
                     <ChevronDown className="hidden sm:block w-4 h-4 text-gray-500" />
                   </button>
@@ -201,8 +207,8 @@ if(!isLogin)return null
                     }`}
                   >
                     <div className="px-4 py-3 bg-gray-50">
-                      <p className="text-sm font-semibold text-gray-900">{"Ubaish"}</p>
-                      <p className="text-sm text-gray-600">{'sdfsdf'}</p>
+                      <p className="text-sm font-semibold capitalize text-gray-900">{user?.role||"Ubaish"}</p>
+                      <p className="text-sm text-gray-600">{user?.username}</p>
                     </div>
                     <div className="py-2">
                       <Link
