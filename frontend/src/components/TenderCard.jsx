@@ -51,7 +51,7 @@ export default function TenderCard({ tender,refetch }) {
         } else if (diffInHours > 0) {
           return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} left`;
         } else {
-          return `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} left`;
+          return `${diffInMinutes} min${diffInMinutes > 1 ? 's' : ''} left`;
         }
       }
     };

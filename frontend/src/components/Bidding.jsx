@@ -88,7 +88,7 @@ const BiddingPage = () => {
   }
 
   return (
-    <div className="min-h-screen pl-12 bg-gray-100 p-8">
+    <div className="min-h-screen md:pl-12 bg-gray-100 md:p-8 py-8 px-2">
       <div className="max-w-7xl mx-auto">
         <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
           <div className="p-6 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
