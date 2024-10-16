@@ -47,6 +47,11 @@ To set up the project locally, follow these steps:
      The server will start on port **5173**.
 
 
+## Preview
+
+Watch the preview video featuring the project here: [Preview Video](https://www.youtube.com/watch?v=WPJ6fEksd3k)
+
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
