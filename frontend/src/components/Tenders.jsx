@@ -108,7 +108,7 @@ export default function Tenders() {
         )}
       </div>
 
-      <TenderCreationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} cb={fetchTenders} />
+      <TenderCreationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSuccess={fetchTenders} />
     </div>
   )
 }
