@@ -4,7 +4,7 @@ import { X } from 'lucide-react';
 import axios from 'axios';
 import { postRequest } from '../../request';
 
-const TenderCreationModal = ({ isOpen, onClose }) => {
+const TenderCreationModal = ({ isOpen, onClose,cb }) => {
   const [tenderName, setTenderName] = useState('');
   const [description, setDescription] = useState('');
   const [startTime, setStartTime] = useState('');
@@ -32,6 +32,7 @@ const TenderCreationModal = ({ isOpen, onClose }) => {
       const response = await postRequest('/tenders', payload);
       console.log('Tender created:', response.data);
       // Reset form and close modal
+      cb();
       setTenderName('');
       setDescription('');
       setStartTime('');

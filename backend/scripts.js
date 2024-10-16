@@ -2,8 +2,8 @@ const User = require('./models/user.model');
 
 exports.createDefaultUsers = async () => {
   try {
-    const adminExists = await User.findOne({ username: 'admin' });
-    const userExists = await User.findOne({ username: 'user' });
+    const adminExists = await User.findOne({ username: 'admin@gmail.com' });
+    const userExists = await User.findOne({ username: 'user@gmail.com' });
 
     if (!adminExists) {
       const admin = new User({

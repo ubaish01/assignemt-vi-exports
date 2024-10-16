@@ -24,6 +24,7 @@ function Login() {
     else {
         toast.success("Logged in success");
         localStorage.setItem("token",res.data.token)
+        localStorage.setItem("user",JSON.stringify(res.data.user))
         navigate('/tenders');
     }
    } catch (error) {
