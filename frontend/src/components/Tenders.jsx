@@ -99,7 +99,7 @@ export default function Tenders() {
       {error && <p className="text-red-500 mb-4">{error}</p>}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredTenders.length > 0 ? (
+        {filteredTenders?.length > 0 ? (
           filteredTenders.map(tender => (
             <TenderCard key={tender._id} tender={tender} refetch={fetchTenders} />
           ))

@@ -5,17 +5,17 @@ const tenderRoutes = require("./routes/tender.routes");
 const authRoutes = require("./routes/auth.routes");
 const notificationRoutes = require("./routes/notification.route");
 const { createDefaultUsers } = require("./scripts");
-const cors = require('cors')
-
+const cors = require('cors');
 
 dotenv.config();
 connectDB();
+
 const app = express();
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use("/api/v1", tenderRoutes);
+app.use("/api/v1/tenders", tenderRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/notifications", notificationRoutes);
 

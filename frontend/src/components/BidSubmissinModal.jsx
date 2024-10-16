@@ -26,7 +26,7 @@ const BidSubmissionModal = ({ isOpen, onClose,tenderId }) => {
       };
 
       // Call the submit bid API
-      const response = await postRequest('/bids', payload); // Make the API request to /bids endpoint
+      const response = await postRequest('/tenders/bids', payload); // Make the API request to /bids endpoint
       console.log('Bid submitted:', response.data);
 
       // Reset form and close modal
